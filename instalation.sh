@@ -14,12 +14,14 @@ parted -s $DISK mkpart primary fat32 1MiB 512MiB
 parted -s $DISK set 1 esp on
 parted -s $DISK mkpart primary ext4 512MiB 100%
 
-mkfs.fat -F32 ${DISK}1
-mkfs.ext4 ${DISK}2
+# Formata as partições
+mkfs.fat -F32 ${DISK}p1
+mkfs.ext4 ${DISK}p2
 
-mount ${DISK}2 /mnt
-mkdir /mnt/boot
-mount ${DISK}1 /mnt/boot
+# Monta as partições
+mount ${DISK}p2 /mnt
+mkdir -p /mnt/boot/efi
+mount ${DISK}p1 /mnt/boot/efi
 
 # Instalação do sistema base
 pacstrap /mnt base linux linux-firmware vim sudo networkmanager grub efibootmgr base-devel git
@@ -50,7 +52,7 @@ echo "root:$PASSWORD" | chpasswd
 echo "%wheel ALL=(ALL) ALL" >> /etc/sudoers
 
 # Instala bootloader
-grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB
+grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB
 grub-mkconfig -o /boot/grub/grub.cfg
 
 # Ativa rede
