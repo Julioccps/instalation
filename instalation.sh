@@ -1,11 +1,9 @@
 #!/bin/bash
 
-set -e
-
-# Define disco e nome do host
-DISK="/dev/sda"
-HOST="archdev"
-USERNAME="fireeletric"
+# Definições
+DISK="/dev/mmcblk0"
+HOST="archpc"
+USERNAME="julio"
 PASSWORD="amora0182"
 
 # Particiona o disco (GPT + EFI + root)
